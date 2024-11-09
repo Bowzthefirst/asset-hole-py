@@ -1,0 +1,55 @@
+2024-11-09 00:13:58,362 - INFO - Starting download process for URL: https://www.youtube.com/watch?v=iSLtnD1lJx0 in format: mp4
+2024-11-09 00:13:58,362 - DEBUG - Initializing YouTube object
+2024-11-09 00:13:58,362 - DEBUG - matched regex search: (?:v=|\/)([0-9A-Za-z_-]{11}).*
+2024-11-09 00:13:58,363 - DEBUG - Attempting to fetch video info (attempts remaining: 3)
+2024-11-09 00:13:58,459 - WARNING - Failed to fetch video info, retries left: 2. Error: HTTP Error 400: Bad Request
+2024-11-09 00:13:59,464 - DEBUG - Attempting to fetch video info (attempts remaining: 2)
+2024-11-09 00:13:59,565 - WARNING - Failed to fetch video info, retries left: 1. Error: HTTP Error 400: Bad Request
+2024-11-09 00:14:00,571 - DEBUG - Attempting to fetch video info (attempts remaining: 1)
+2024-11-09 00:14:00,671 - WARNING - Failed to fetch video info, retries left: 0. Error: HTTP Error 400: Bad Request
+2024-11-09 00:14:00,671 - INFO - Using fallback title: video_iSLtnD1lJx0
+2024-11-09 00:14:01,677 - INFO - Video details - Title: video_iSLtnD1lJx0, Length: 0 seconds
+2024-11-09 00:14:01,678 - INFO - Processing MP4 download
+2024-11-09 00:14:02,715 - ERROR - An error occurred: HTTP Error 400: Bad Request
+Traceback (most recent call last):
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/app.py", line 80, in download_video
+    streams = yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc()
+              ^^^^^^^^^^
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/pydwn/lib/python3.13/site-packages/pytube/__main__.py", line 296, in streams
+    return StreamQuery(self.fmt_streams)
+                       ^^^^^^^^^^^^^^^^
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/pydwn/lib/python3.13/site-packages/pytube/__main__.py", line 176, in fmt_streams
+    stream_manifest = extract.apply_descrambler(self.streaming_data)
+                                                ^^^^^^^^^^^^^^^^^^^
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/pydwn/lib/python3.13/site-packages/pytube/__main__.py", line 160, in streaming_data
+    self.bypass_age_gate()
+    ~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/pydwn/lib/python3.13/site-packages/pytube/__main__.py", line 257, in bypass_age_gate
+    innertube_response = innertube.player(self.video_id)
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/pydwn/lib/python3.13/site-packages/pytube/innertube.py", line 448, in player
+    return self._call_api(endpoint, query, self.base_data)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/pydwn/lib/python3.13/site-packages/pytube/innertube.py", line 390, in _call_api
+    response = request._execute_request(
+        endpoint_url,
+    ...<2 lines>...
+        data=data
+    )
+  File "/Users/alexanderbowser/Desktop/2025 Python/YouTube_Download/pydwn/lib/python3.13/site-packages/pytube/request.py", line 37, in _execute_request
+    return urlopen(request, timeout=timeout)  # nosec
+  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py", line 189, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py", line 495, in open
+    response = meth(req, response)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py", line 604, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py", line 533, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py", line 466, in _call_chain
+    result = func(*args)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/urllib/request.py", line 613, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 400: Bad Request

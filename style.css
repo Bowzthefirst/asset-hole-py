@@ -1,0 +1,47 @@
+.stApp {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.main-header {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.main-header h1 {
+    color: #FF4B4B;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.main-header p {
+    color: #CCCCCC;
+    font-size: 1.1rem;
+}
+
+.stButton button {
+    width: 100%;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    background-color: #FF4B4B;
+    border: none;
+}
+
+.stButton button:hover {
+    background-color: #FF6B6B;
+}
+
+.usage-guide {
+    background-color: #252526;
+    padding: 1.5rem;
+    border-radius: 5px;
+    margin-top: 2rem;
+}
+
+.download-section {
+    background-color: #252526;
+    padding: 1.5rem;
+    border-radius: 5px;
+    margin: 1rem 0;
+} 
