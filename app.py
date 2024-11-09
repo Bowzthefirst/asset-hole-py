@@ -36,6 +36,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def download_video(url, output_path, format='mp4'):
+    # Create a temporary directory
+    temp_dir = tempfile.mkdtemp()
     try:
         logger.info(f"Starting download process for URL: {url} in format: {format}")
         
@@ -69,57 +71,50 @@ def download_video(url, output_path, format='mp4'):
             except Exception as e:
                 logger.error(f"Error fetching video info: {str(e)}", exc_info=True)
                 st.error(f"Error fetching video info: {str(e)}")
-                return None, None
+                return None, None, None
 
-        # Create a temporary directory for this download
-        with tempfile.TemporaryDirectory() as temp_dir:
-            logger.info(f"Created temporary directory: {temp_dir}")
-            
-            # Update download options based on format
-            if format == 'mp4':
-                logger.info("Processing MP4 download")
-                ydl_opts = {
-                    **common_opts,
-                    'format': 'best[ext=mp4]',
-                    'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
-                }
-            
-            elif format == 'mp3':
-                logger.info("Processing MP3 download")
-                ydl_opts = {
-                    **common_opts,
-                    'format': 'bestaudio/best',
-                    'postprocessors': [{
-                        'key': 'FFmpegExtractAudio',
-                        'preferredcodec': 'mp3',
-                        'preferredquality': '192',
-                    }],
-                    'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
-                }
+        # Set up download options
+        if format == 'mp4':
+            ydl_opts = {
+                **common_opts,
+                'format': 'best[ext=mp4]',
+                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
+            }
+        elif format == 'mp3':
+            ydl_opts = {
+                **common_opts,
+                'format': 'bestaudio/best',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }],
+                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
+            }
 
-            # Download the video/audio
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                try:
-                    logger.debug("Starting download")
-                    ydl.download([url])
-                    
-                    # After download, get the file from temp directory
-                    downloaded_files = os.listdir(temp_dir)
-                    if downloaded_files:
-                        temp_file_path = os.path.join(temp_dir, downloaded_files[0])
-                        return temp_file_path, title
-                    
-                    return None, None
-                
-                except Exception as e:
-                    logger.error(f"Error during download: {str(e)}", exc_info=True)
-                    st.error(f"Error during download: {str(e)}")
-                    return None, None
-
-    except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}", exc_info=True)
-        st.error(f"An error occurred: {str(e)}")
-        return None, None
+        # Download the video/audio
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            try:
+                ydl.download([url])
+                downloaded_files = os.listdir(temp_dir)
+                if downloaded_files:
+                    file_path = os.path.join(temp_dir, downloaded_files[0])
+                    # Read the file content before returning
+                    with open(file_path, 'rb') as f:
+                        file_content = f.read()
+                    return file_content, title, downloaded_files[0]
+                return None, None, None
+            except Exception as e:
+                logger.error(f"Error during download: {str(e)}", exc_info=True)
+                st.error(f"Error during download: {str(e)}")
+                return None, None, None
+    finally:
+        # Clean up the temporary directory
+        try:
+            import shutil
+            shutil.rmtree(temp_dir)
+        except Exception as e:
+            logger.error(f"Error cleaning up temp directory: {str(e)}")
 
 # Add after imports
 def check_ffmpeg():
@@ -154,23 +149,17 @@ def main():
         if url:
             logger.info(f"Download requested for URL: {url} in format: {format_option}")
             with st.spinner("Processing..."):
-                # Remove the "downloads" directory parameter
-                file_path, title = download_video(url, None, format_option.lower())
+                file_content, title, filename = download_video(url, None, format_option.lower())
                 
-                if file_path and title:
-                    try:
-                        with open(file_path, 'rb') as file:
-                            logger.info(f"File ready for download: {file_path}")
-                            st.success(f"Successfully downloaded: {title}")
-                            st.download_button(
-                                label=f"Download {format_option}",
-                                data=file,
-                                file_name=f"{title}.{format_option.lower()}",
-                                mime=f"{'video/mp4' if format_option == 'MP4' else 'audio/mp3'}"
-                            )
-                    except Exception as e:
-                        logger.error(f"Error handling the downloaded file: {str(e)}", exc_info=True)
-                        st.error(f"An error occurred: {str(e)}")
+                if file_content and title and filename:
+                    logger.info(f"File ready for download: {filename}")
+                    st.success(f"Successfully downloaded: {title}")
+                    st.download_button(
+                        label=f"Download {format_option}",
+                        data=file_content,
+                        file_name=filename,
+                        mime=f"{'video/mp4' if format_option == 'MP4' else 'audio/mp3'}"
+                    )
         else:
             st.warning("Please enter a YouTube URL")
     st.markdown('</div>', unsafe_allow_html=True)
