@@ -1,0 +1,16 @@
+2024-11-09 00:38:47,958 - INFO - Download requested for URL: https://www.youtube.com/watch?v=iSLtnD1lJx0 in format: MP4
+2024-11-09 00:38:47,958 - INFO - Starting download process for URL: https://www.youtube.com/watch?v=iSLtnD1lJx0 in format: mp4
+2024-11-09 00:38:48,018 - DEBUG - Fetching video information
+2024-11-09 00:38:49,807 - INFO - Video details - Title: Amadeus - Dominance, Duration: 298 seconds
+2024-11-09 00:38:49,808 - INFO - Processing MP4 download
+2024-11-09 00:38:49,843 - DEBUG - Starting download
+2024-11-09 00:38:55,759 - INFO - Download completed: downloads/Amadeus - Dominance.mp4
+2024-11-09 00:38:55,760 - INFO - File ready for download: downloads/Amadeus - Dominance.mp4
+2024-11-09 00:39:02,777 - INFO - Download requested for URL: https://www.youtube.com/watch?v=iSLtnD1lJx0 in format: MP3
+2024-11-09 00:39:02,778 - INFO - Starting download process for URL: https://www.youtube.com/watch?v=iSLtnD1lJx0 in format: mp3
+2024-11-09 00:39:02,831 - DEBUG - Fetching video information
+2024-11-09 00:39:04,482 - INFO - Video details - Title: Amadeus - Dominance, Duration: 298 seconds
+2024-11-09 00:39:04,482 - INFO - Processing MP3 download
+2024-11-09 00:39:04,519 - DEBUG - Starting download
+2024-11-09 00:39:09,913 - INFO - Download completed: downloads/Amadeus - Dominance.mp3
+2024-11-09 00:39:09,914 - INFO - File ready for download: downloads/Amadeus - Dominance.mp3

@@ -37,14 +37,23 @@ def download_video(url, output_path, format='mp4'):
     try:
         logger.info(f"Starting download process for URL: {url} in format: {format}")
         
-        ydl_opts = {
+        # Common options for both info extraction and download
+        common_opts = {
             'quiet': True,
             'no_warnings': True,
             'extract_flat': True,
+            # Add these options to help bypass restrictions
+            'nocheckcertificate': True,
+            'geo_bypass': True,
+            'format': 'best',
+            # Add custom headers
+            'http_headers': {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
         }
         
         # First, get video information
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(common_opts) as ydl:
             try:
                 logger.debug("Fetching video information")
                 info = ydl.extract_info(url, download=False)
@@ -60,9 +69,11 @@ def download_video(url, output_path, format='mp4'):
                 st.error(f"Error fetching video info: {str(e)}")
                 return None, None
 
+        # Update download options based on format
         if format == 'mp4':
             logger.info("Processing MP4 download")
             ydl_opts = {
+                **common_opts,
                 'format': 'best[ext=mp4]',
                 'outtmpl': os.path.join(output_path, '%(title)s.%(ext)s'),
             }
@@ -70,6 +81,7 @@ def download_video(url, output_path, format='mp4'):
         elif format == 'mp3':
             logger.info("Processing MP3 download")
             ydl_opts = {
+                **common_opts,
                 'format': 'bestaudio/best',
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
@@ -164,6 +176,19 @@ def main():
         5. Click the download button that appears to save your file
         </div>
         """, unsafe_allow_html=True)
+    
+    # Add this after your header
+    st.warning("""
+        ⚠️ Note: Due to YouTube's restrictions, some videos might not be downloadable. 
+        If you encounter issues, try:
+        - Using shorter videos
+        - Using different videos
+        - Checking if the video is publicly available
+    """)
+
+# Create downloads directory at startup
+if not os.path.exists("downloads"):
+    os.makedirs("downloads")
 
 if __name__ == "__main__":
     main() 

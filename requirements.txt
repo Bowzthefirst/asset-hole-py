@@ -1,3 +1,4 @@
-streamlit
-yt_dlp
-moviepy
+streamlit>=1.32.0
+yt-dlp>=2024.3.10
+moviepy>=1.0.3
+requests>=2.31.0
