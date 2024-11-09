@@ -5,6 +5,7 @@ import logging
 import sys
 from datetime import datetime
 from moviepy.editor import VideoFileClip
+import subprocess
 
 # Load custom CSS
 def load_css():
@@ -116,8 +117,18 @@ def download_video(url, output_path, format='mp4'):
         st.error(f"An error occurred: {str(e)}")
         return None, None
 
+# Add after imports
+def check_ffmpeg():
+    try:
+        subprocess.run(['ffmpeg', '-version'], capture_output=True)
+        return True
+    except FileNotFoundError:
+        st.error("FFmpeg is not installed. Some features may not work properly.")
+        return False
+
 # The main() function remains largely the same
 def main():
+    check_ffmpeg()
     # Custom header with styling
     st.markdown('<div class="main-header">', unsafe_allow_html=True)
     st.markdown('<h1>Asset Hole YouTube Downloader</h1>', unsafe_allow_html=True)
