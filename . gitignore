@@ -1,0 +1,75 @@
+# Service account and sensitive files
+*firebase*.json
+*.pem
+*.key
+credentials/
+secrets/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+.env
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Test files and directories
+test*.py
+tests/
+testing/
+
+# Downloaded content
+downloads/
+youtube_videos/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Keep only necessary files for Streamlit app
+!.streamlit/
+!app.py
+!Procfile
+!README.md
+!requirements.txt
+!packages.txt
+!style.css

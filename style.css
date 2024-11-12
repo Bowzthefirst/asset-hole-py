@@ -16,7 +16,7 @@
 }
 
 .main-header p {
-    color: #CCCCCC;
+    color: #4A4A4A;
     font-size: 1.1rem;
 }
 
@@ -26,6 +26,7 @@
     padding: 0.5rem 1rem;
     background-color: #FF4B4B;
     border: none;
+    color: white;
 }
 
 .stButton button:hover {
@@ -33,14 +34,14 @@
 }
 
 .usage-guide {
-    background-color: #252526;
+    background-color: #F8F9FA;
     padding: 1.5rem;
     border-radius: 5px;
     margin-top: 2rem;
 }
 
 .download-section {
-    background-color: #252526;
+    background-color: #F8F9FA;
     padding: 1.5rem;
     border-radius: 5px;
     margin: 1rem 0;

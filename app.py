@@ -35,11 +35,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def download_video(url, output_path, format='mp4'):
+def download_video(url, output_path, format='mp4', quality='normal'):
     # Create a temporary directory
     temp_dir = tempfile.mkdtemp()
     try:
-        logger.info(f"Starting download process for URL: {url} in format: {format}")
+        logger.info(f"Starting download process for URL: {url} in format: {format} with quality: {quality}")
         
         # Common options for both info extraction and download
         common_opts = {
@@ -56,6 +56,36 @@ def download_video(url, output_path, format='mp4'):
             }
         }
         
+        # Quality settings
+        if format == 'mp4':
+            if quality == 'high':
+                format_string = 'bestvideo[ext=mp4][height>=1080]+bestaudio[ext=m4a]/best[ext=mp4]/best'
+            elif quality == 'medium':
+                format_string = 'bestvideo[ext=mp4][height>=720][height<1080]+bestaudio[ext=m4a]/best[ext=mp4]/best'
+            else:  # normal
+                format_string = 'best[ext=mp4]'
+        else:  # mp3
+            format_string = 'bestaudio/best'
+
+        # Update ydl_opts based on format and quality
+        if format == 'mp4':
+            ydl_opts = {
+                **common_opts,
+                'format': format_string,
+                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
+            }
+        else:  # mp3
+            ydl_opts = {
+                **common_opts,
+                'format': format_string,
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '320' if quality == 'high' else '192',
+                }],
+                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
+            }
+
         # First, get video information
         with yt_dlp.YoutubeDL(common_opts) as ydl:
             try:
@@ -72,25 +102,6 @@ def download_video(url, output_path, format='mp4'):
                 logger.error(f"Error fetching video info: {str(e)}", exc_info=True)
                 st.error(f"Error fetching video info: {str(e)}")
                 return None, None, None
-
-        # Set up download options
-        if format == 'mp4':
-            ydl_opts = {
-                **common_opts,
-                'format': 'best[ext=mp4]',
-                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
-            }
-        elif format == 'mp3':
-            ydl_opts = {
-                **common_opts,
-                'format': 'bestaudio/best',
-                'postprocessors': [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }],
-                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
-            }
 
         # Download the video/audio
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -135,7 +146,7 @@ def main():
     st.markdown('</div>', unsafe_allow_html=True)
     
     # Create columns for better layout
-    col1, col2 = st.columns([2, 1])
+    col1, col2, col3 = st.columns([2, 1, 1])
     
     with col1:
         url = st.text_input("🔗 Enter YouTube URL:")
@@ -143,13 +154,21 @@ def main():
     with col2:
         format_option = st.radio("📦 Select Format:", ('MP4', 'MP3'))
     
+    with col3:
+        quality_option = st.radio("🎯 Quality:", ('Normal', 'Medium', 'High'))
+    
     # Download section
     st.markdown('<div class="download-section">', unsafe_allow_html=True)
     if st.button("⬇️ Download"):
         if url:
-            logger.info(f"Download requested for URL: {url} in format: {format_option}")
+            logger.info(f"Download requested for URL: {url} in format: {format_option} with quality: {quality_option}")
             with st.spinner("Processing..."):
-                file_content, title, filename = download_video(url, None, format_option.lower())
+                file_content, title, filename = download_video(
+                    url, 
+                    None, 
+                    format_option.lower(), 
+                    quality_option.lower()
+                )
                 
                 if file_content and title and filename:
                     logger.info(f"File ready for download: {filename}")
