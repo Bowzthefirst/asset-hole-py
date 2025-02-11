@@ -13,4 +13,6 @@ A Streamlit web application that allows users to download YouTube videos in eith
 
 
 # Set up authentication for Google Cloud
-export GOOGLE_APPLICATION_CREDENTIALS="nd-pi-ec02a-firebase-adminsdk-8a7lb-dc8e6032fb.json"
+python youtube_downloader.py "https://www.youtube.com/watch?v=_ErX8YCDC84" --format mp4 --quality normal
+
+https://www.youtube.com/watch?v=_ErX8YCDC84

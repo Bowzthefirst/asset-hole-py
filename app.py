@@ -4,7 +4,7 @@ import yt_dlp
 import logging
 import sys
 from datetime import datetime
-from moviepy.editor import VideoFileClip
+#from moviepy.editor import VideoFileClip
 import subprocess
 import tempfile
 
